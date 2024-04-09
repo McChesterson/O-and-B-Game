@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 forward;
     public float Thrust = 10;
     public float RotationSpeed = 2;
+    public float TopSpeed = 50;
+    public float GravStrength = 10;
+    public GameObject EngineSprite;
+
     Vector2 joystickL;
 
     // Start is called before the first frame update
@@ -26,8 +30,21 @@ public class PlayerMovement : MonoBehaviour
         rb2d.rotation += -joystickL.x * RotationSpeed;
         if(Input.GetButton("Fire1"))
         {
+            EngineSprite.SetActive(true);
+            
             rb2d.velocity += forward * Thrust * Time.fixedDeltaTime;
+            if(rb2d.velocity.magnitude > TopSpeed)
+            {
+                rb2d.velocity = rb2d.velocity.normalized * TopSpeed;
+            }
         }
+        else
+        {
+            EngineSprite.SetActive(false);
+        }
+        Vector2 gravVector = new Vector2(rb2d.transform.position.x, rb2d.transform.position.y);
+        float gravDistance = gravVector.magnitude;
+        rb2d.velocity -= Mathf.Pow(1.0f/gravDistance,2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
     }
     void Update()
     {
