@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
 
     private Rigidbody2D rb2d;
-    private Vector2 vel;
+    public GameObject EngineSprite;
+
     private Vector2 forward;
+    [Header("Movement")]
     public float Thrust = 10;
     public float RotationSpeed = 2;
     public float TopSpeed = 50;
     public float GravStrength = 10;
-    public GameObject EngineSprite;
 
     Vector2 joystickL;
+    bool isBoosting = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
         joystickL.x = Input.GetAxis("Horizontal");
         joystickL.y = Input.GetAxis("Vertical");
         rb2d.rotation += -joystickL.x * RotationSpeed;
-        if(Input.GetButton("Fire1"))
+        if(isBoosting)
         {
             EngineSprite.SetActive(true);
             
@@ -43,6 +46,14 @@ public class PlayerMovement : MonoBehaviour
             EngineSprite.SetActive(false);
         }
         ApplyGravity();
+    }
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        joystickL = context.ReadValue<Vector2>();
+    }
+    public void OnBoost(InputAction.CallbackContext context)
+    {
+        isBoosting = context.action.triggered;
     }
     void ApplyGravity()
     {
