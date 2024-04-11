@@ -42,9 +42,19 @@ public class PlayerMovement : MonoBehaviour
         {
             EngineSprite.SetActive(false);
         }
-        Vector2 gravVector = new Vector2(rb2d.transform.position.x, rb2d.transform.position.y);
-        float gravDistance = gravVector.magnitude;
-        rb2d.velocity -= Mathf.Pow(1.0f/gravDistance,2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
+        ApplyGravity();
+    }
+    void ApplyGravity()
+    {
+        GameObject[] gravObjects;
+        gravObjects = GameObject.FindGameObjectsWithTag("Grav");
+        for (int i = 0; i < gravObjects.Length; i++)
+        {
+            Vector2 objectPos = new Vector2(gravObjects[i].transform.position.x, gravObjects[i].transform.position.y);
+            Vector2 gravVector = objectPos - new Vector2(rb2d.transform.position.x, rb2d.transform.position.y);
+            float gravDistance = gravVector.magnitude;
+            rb2d.velocity += Mathf.Pow(1.0f/gravDistance,2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
+        }
     }
     void Update()
     {
