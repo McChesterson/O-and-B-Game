@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        //allowing the player to wrap around to the other side of the screen
         forward = new Vector2(rb2d.transform.up.x, rb2d.transform.up.y);
         while (transform.position.x > 10)
         {
