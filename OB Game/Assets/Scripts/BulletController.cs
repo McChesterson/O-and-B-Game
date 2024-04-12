@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public float bulletSpeed = 20;
     Rigidbody2D rb;
+    public int damage = 10;
+    [Header("Movement")]
+    public float bulletSpeed = 20;
     public float range = 2;
     public float GravStrength = 10;
     float rangeRemaining = 0;
@@ -32,7 +34,6 @@ public class BulletController : MonoBehaviour
         gravObjects = GameObject.FindGameObjectsWithTag("Grav");
         for (int i = 0; i < gravObjects.Length; i++)
         {
-            print(gravObjects[i].name);
             Vector2 objectPos = new Vector2(gravObjects[i].transform.position.x, gravObjects[i].transform.position.y);
             Vector2 gravVector = objectPos - new Vector2(rb.transform.position.x, rb.transform.position.y);
             float gravDistance = gravVector.magnitude;

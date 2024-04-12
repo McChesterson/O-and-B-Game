@@ -9,8 +9,7 @@ public class PlayerShooting : MonoBehaviour
     Rigidbody2D rb;
     public GameObject firePoint;
     public GameObject bullet;
-
-    bool isShooting = false;
+    
     public float fireRate = 0.5f;
     // Start is called before the first frame update
     void Start()
@@ -19,14 +18,17 @@ public class PlayerShooting : MonoBehaviour
     }
     public void OnShoot(InputAction.CallbackContext context)
     {
-        isShooting = context.action.triggered;
+        if (context.performed)
+        {
+            Shoot();
+        }
     }
     void Update()
     {
-        if (isShooting)
-        {
-            Instantiate(bullet, firePoint.transform.position, firePoint.transform.rotation);
-        }
+    }
+    void Shoot()
+    {
+        Instantiate(bullet, firePoint.transform.position, firePoint.transform.rotation);
     }
     
 }

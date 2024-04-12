@@ -4,27 +4,38 @@ using UnityEngine;
 
 public class CollisionManager : MonoBehaviour
 {
+    public ParticleSystem explodeParticles;
+    PlayerHealth playerHP;
+
+    void Start()
+    {
+        playerHP = GetComponent<PlayerHealth>();
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (collision.gameObject.tag)
         {
             case "Grav":
-                print("Player collided with celestial body");
+                OnCrash();
                 break;
             case "Projectile":
-                print("Player collided with bullet");
+                OnHit(collision.gameObject);
                 break;
             default:
-                print("Hit something");
+                print("Hit UFO");
                 break;
         }
     }
-    void Start()
+    void OnCrash()
     {
-        
+        explodeParticles.Play();
+        print("played particle effect");
+    }
+    void OnHit(GameObject projectile)
+    {
+        playerHP.LoseHealth(projectile.GetComponent<BulletController>().damage);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
