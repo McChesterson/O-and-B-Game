@@ -28,8 +28,8 @@ public class CollisionManager : MonoBehaviour
     }
     void OnCrash()
     {
-        explodeParticles.Play();
-        print("played particle effect");
+        Instantiate(explodeParticles, gameObject.transform); // need to not be a child, so it will outlive this gameObject?
+        //Destroy(gameObject); // this will destroy the particle system as well. need something more complex for respawning, etc
     }
     void OnHit(GameObject projectile)
     {

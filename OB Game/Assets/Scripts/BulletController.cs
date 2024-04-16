@@ -40,4 +40,24 @@ public class BulletController : MonoBehaviour
             rb.velocity += Mathf.Pow(1.0f / gravDistance, 2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Grav":
+                print("Hit grav well");
+                Destroy(gameObject); 
+                break;
+            case "Projectile":
+                print("Hit projectile");
+                Destroy(gameObject); 
+                break;
+            default:
+                print("Hit default object");
+                Destroy(gameObject); 
+                break;
+        }
+    }
+ 
 }
