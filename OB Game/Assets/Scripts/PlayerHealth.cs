@@ -16,7 +16,10 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
     public void LoseHealth(int amount)
     {

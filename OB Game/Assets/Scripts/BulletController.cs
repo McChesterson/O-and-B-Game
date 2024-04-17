@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,11 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject);
         }
         ApplyGravity();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject objectHit = collision.gameObject;
+        objectHit.GetComponent<PlayerHealth>().LoseHealth(damage);
     }
     void ApplyGravity()
     {

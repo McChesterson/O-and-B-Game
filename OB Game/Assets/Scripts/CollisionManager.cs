@@ -18,9 +18,11 @@ public class CollisionManager : MonoBehaviour
             case "Grav":
                 OnCrash();
                 break;
+            /*
             case "Projectile":
                 OnHit(collision.gameObject);
                 break;
+            */
             default:
                 print("Hit UFO");
                 break;
