@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float RotationSpeed = 2;
     public float TopSpeed = 50;
     public float GravStrength = 10;
+    Camera cam;
+    float minx, maxx, miny, maxy, screenwidth, screenheight;
 
     Vector2 joystickL;
     bool isBoosting = false;
@@ -23,6 +25,13 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        cam = Camera.main;
+        minx = -cam.orthographicSize * Screen.width / Screen.height;
+        maxx = cam.orthographicSize * Screen.width / Screen.height;
+        miny = -cam.orthographicSize;
+        maxy = cam.orthographicSize;
+        screenwidth = maxx - minx;
+        screenheight = maxy - miny;
     }
 
     // Update is called once per frame
@@ -30,8 +39,12 @@ public class PlayerMovement : MonoBehaviour
     {
         joystickL.x = Input.GetAxis("Horizontal");
         joystickL.y = Input.GetAxis("Vertical");
+
+        rb2d.constraints = RigidbodyConstraints2D.None;
         rb2d.rotation += -joystickL.x * RotationSpeed;
-        if(isBoosting)
+        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        if (isBoosting)
         {
             EngineSprite.SetActive(true);
             
@@ -71,21 +84,21 @@ public class PlayerMovement : MonoBehaviour
     {
         //allowing the player to wrap around to the other side of the screen
         forward = new Vector2(rb2d.transform.up.x, rb2d.transform.up.y);
-        while (transform.position.x > 10)
+        while (transform.position.x > maxx)
         {
-            transform.position = new Vector3(transform.position.x - 20, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x - screenwidth, transform.position.y, transform.position.z);
         }
-        while (transform.position.x < -10)
+        while (transform.position.x < minx)
         {
-            transform.position = new Vector3(transform.position.x + 20, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x + screenwidth, transform.position.y, transform.position.z);
         }
-        while (transform.position.y > 5)
+        while (transform.position.y > maxy)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - 10, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y - screenheight, transform.position.z);
         }
-        while (transform.position.y < -5)
+        while (transform.position.y < miny)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y + 10, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + screenheight, transform.position.z);
         }
     }
 }
