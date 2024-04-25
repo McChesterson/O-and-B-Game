@@ -18,39 +18,13 @@ public class BulletController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.up * bulletSpeed;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        rangeRemaining += 1 * Time.deltaTime;
-        if (rangeRemaining >= range)
-        {
-            Destroy(gameObject);
-        }
-        ApplyGravity();
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        GameObject objectHit = collision.gameObject;
-        objectHit.GetComponent<PlayerHealth>().LoseHealth(damage);
-    }
-    void ApplyGravity()
-    {
-        GameObject[] gravObjects;
-        gravObjects = GameObject.FindGameObjectsWithTag("Grav");
-        for (int i = 0; i < gravObjects.Length; i++)
-        {
-            Vector2 objectPos = new Vector2(gravObjects[i].transform.position.x, gravObjects[i].transform.position.y);
-            Vector2 gravVector = objectPos - new Vector2(rb.transform.position.x, rb.transform.position.y);
-            float gravDistance = gravVector.magnitude;
-            rb.velocity += Mathf.Pow(1.0f / gravDistance, 2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (collision.gameObject.tag)
         {
+            case "Player":
+                //print("bullet hit player");
+                break;
             case "Grav":
                 print("Hit grav well");
                 Destroy(gameObject); 
@@ -65,5 +39,25 @@ public class BulletController : MonoBehaviour
                 break;
         }
     }
- 
+    void Update()
+    {
+        rangeRemaining += 1 * Time.deltaTime;
+        if (rangeRemaining >= range)
+        {
+            Destroy(gameObject);
+        }
+        ApplyGravity();
+    }
+    void ApplyGravity()
+    {
+        GameObject[] gravObjects;
+        gravObjects = GameObject.FindGameObjectsWithTag("Grav");
+        for (int i = 0; i < gravObjects.Length; i++)
+        {
+            Vector2 objectPos = new Vector2(gravObjects[i].transform.position.x, gravObjects[i].transform.position.y);
+            Vector2 gravVector = objectPos - new Vector2(rb.transform.position.x, rb.transform.position.y);
+            float gravDistance = gravVector.magnitude;
+            rb.velocity += Mathf.Pow(1.0f / gravDistance, 2.0f) * gravVector.normalized * GravStrength * Time.fixedDeltaTime;
+        }
+    }
 }

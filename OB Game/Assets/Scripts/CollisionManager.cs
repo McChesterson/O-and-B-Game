@@ -18,11 +18,9 @@ public class CollisionManager : MonoBehaviour
             case "Grav":
                 OnCrash();
                 break;
-            /*
             case "Projectile":
                 OnHit(collision.gameObject);
                 break;
-            */
             default:
                 print("Hit UFO");
                 break;
@@ -36,6 +34,7 @@ public class CollisionManager : MonoBehaviour
     void OnHit(GameObject projectile)
     {
         playerHP.LoseHealth(projectile.GetComponent<BulletController>().damage);
+        Destroy(projectile.gameObject);
     }
 
     void Update()

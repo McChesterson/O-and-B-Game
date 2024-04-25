@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public float GravStrength = 10;
     Camera cam;
     float minx, maxx, miny, maxy, screenwidth, screenheight;
-
+    public Transform spawnpoint;
     Vector2 joystickL;
     bool isBoosting = false;
 
@@ -33,13 +33,22 @@ public class PlayerMovement : MonoBehaviour
         screenwidth = maxx - minx;
         screenheight = maxy - miny;
     }
-
+    private void Awake()
+    {
+        spawnpoint = GameObject.Find("Spawnpoint").transform;
+        transform.position = spawnpoint.position;
+    }
     // Update is called once per frame
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        joystickL = context.ReadValue<Vector2>();
+    }
+    public void OnBoost(InputAction.CallbackContext context)
+    {
+        isBoosting = context.action.triggered;
+    }
     void FixedUpdate()
     {
-        joystickL.x = Input.GetAxis("Horizontal");
-        joystickL.y = Input.GetAxis("Vertical");
-
         rb2d.constraints = RigidbodyConstraints2D.None;
         rb2d.rotation += -joystickL.x * RotationSpeed;
         rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -49,24 +58,16 @@ public class PlayerMovement : MonoBehaviour
             EngineSprite.SetActive(true);
             
             rb2d.velocity += forward * Thrust * Time.fixedDeltaTime;
-            if(rb2d.velocity.magnitude > TopSpeed)
-            {
-                rb2d.velocity = rb2d.velocity.normalized * TopSpeed;
-            }
         }
         else
         {
             EngineSprite.SetActive(false);
         }
+        if(rb2d.velocity.magnitude > TopSpeed)
+        {
+            rb2d.velocity = rb2d.velocity.normalized * TopSpeed;
+        }
         ApplyGravity();
-    }
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        joystickL = context.ReadValue<Vector2>();
-    }
-    public void OnBoost(InputAction.CallbackContext context)
-    {
-        isBoosting = context.action.triggered;
     }
     void ApplyGravity()
     {
